@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discord from Zero — Complete Beginner + Safety Guide</title>
+<style>
+:root{
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-mono:"Cascadia Code","Consolas","SF Mono",Menlo,"Liberation Mono",monospace;
+  --color-text-primary:#1c1b19;
+  --color-text-secondary:#57534e;
+  --color-text-tertiary:#8b8782;
+  --color-background-primary:#ffffff;
+  --color-background-secondary:#f6f5f3;
+  --color-border-primary:#b8b4ae;
+  --color-border-secondary:#d6d3ce;
+  --color-border-tertiary:#e9e6e2;
+  --color-background-success:#e3f6ef;
+  --color-background-warning:#fdf3e0;
+  --color-background-danger:#fcebeb;
+  --page-bg:#fbfaf8;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --color-text-primary:#ededed;
+    --color-text-secondary:#b3b0ab;
+    --color-text-tertiary:#827d76;
+    --color-background-primary:#1c1b19;
+    --color-background-secondary:#252420;
+    --color-border-primary:#56524c;
+    --color-border-secondary:#423f39;
+    --color-border-tertiary:#34322e;
+    --color-background-success:#0c2c25;
+    --color-background-warning:#2e2410;
+    --color-background-danger:#2e1414;
+    --page-bg:#151412;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--page-bg)}
+body,div,span,p,h1,h2,h3,button{font-family:var(--font-sans);color:var(--color-text-primary)}
+body{line-height:1.5;padding:22px 16px 64px}
+.app{max-width:760px;margin:0 auto}
+.pagehead{margin-bottom:18px}
+.pagehead h1{font-size:24px;font-weight:650;letter-spacing:-.4px}
+.pagehead .sub{font-size:13px;color:var(--color-text-secondary);margin-top:4px;line-height:1.6}
+.phase-nav{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.pn{font-size:11px;padding:4px 11px;border-radius:16px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-secondary);cursor:pointer;white-space:nowrap;transition:all .15s}
+.pn:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
+.pn.done{border-color:#4752c4;color:#4752c4;background:#e8eafd}
+.pn.active{background:#5865f2;color:#fff;border-color:#5865f2}
+@media(prefers-color-scheme:dark){.pn.done{background:#1c1f4a;color:#b6bdf7;border-color:#4752c4}.pn.active{background:#3a429e;color:#cdd2fb;border-color:#5865f2}}
+.pbar{height:4px;background:var(--color-border-tertiary);border-radius:2px;margin-bottom:6px;overflow:hidden}
+.pfill{height:100%;background:#5865f2;transition:width .4s}
+.pmeta{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary);margin-bottom:18px}
+.pmeta .reset{cursor:pointer;text-decoration:underline}
+.phase-title{font-size:19px;font-weight:600;margin-bottom:4px}
+.phase-desc{font-size:13px;color:var(--color-text-secondary);line-height:1.65;margin-bottom:18px}
+.step{border:0.5px solid var(--color-border-tertiary);border-radius:12px;background:var(--color-background-primary);margin-bottom:10px;overflow:hidden}
+.step-hdr{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;user-select:none}
+.step-hdr:hover{background:var(--color-background-secondary)}
+.sn{width:22px;height:22px;border-radius:50%;background:#5865f2;color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.st{font-size:14px;font-weight:550;flex:1;line-height:1.3}
+.sbadge{font-size:10px;padding:2px 7px;border-radius:8px;flex-shrink:0;display:inline-flex;align-items:center;gap:3px}
+.sec-badge{background:#fcebeb;color:#791f1f;border:0.5px solid #f09595}
+.adv-badge{background:#eeedfe;color:#3c3489;border:0.5px solid #afa9ec}
+@media(prefers-color-scheme:dark){.sec-badge{background:#501313;color:#f7c1c1;border-color:#a32d2d}.adv-badge{background:#26215c;color:#cecbf6;border-color:#534ab7}}
+.chev{font-size:12px;color:var(--color-text-tertiary);transition:transform .2s}
+.step.open .chev{transform:rotate(180deg)}
+.step-body{display:none;padding:0 14px 14px}
+.step.open .step-body{display:block}
+.step-desc{font-size:13px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:12px;padding-top:4px}
+.block{border-radius:8px;overflow:hidden;border:0.5px solid var(--color-border-tertiary);margin-bottom:8px}
+.bhdr{display:flex;align-items:center;gap:6px;padding:6px 10px;font-size:11px;font-weight:550}
+.prm-hdr{background:#efe9fd;color:#43338a;border-bottom:0.5px solid #cfc2f4}
+.do-hdr{background:#e6e9fb;color:#2a338c;border-bottom:0.5px solid #c2c8f4}
+@media(prefers-color-scheme:dark){.prm-hdr{background:#241a4d;color:#c9bdf6;border-color:#43338a}.do-hdr{background:#1c2153;color:#bcc4f6;border-color:#2a338c}}
+.ptag{font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.06em;padding:1px 6px;border-radius:6px;background:rgba(0,0,0,.10)}
+@media(prefers-color-scheme:dark){.ptag{background:rgba(255,255,255,.12)}}
+.bbody{padding:8px 10px;background:var(--color-background-secondary)}
+.row{display:flex;align-items:flex-start;gap:5px;margin-bottom:4px}
+.cmd{font-size:12px;font-family:var(--font-mono);color:var(--color-text-primary);line-height:1.55;word-break:break-word;white-space:pre-wrap;flex:1}
+.note{font-size:11px;color:var(--color-text-secondary);line-height:1.55;padding:3px 0 5px 16px;border-left:2px solid var(--color-border-tertiary);margin-bottom:4px;white-space:pre-wrap}
+.cpbtn{margin-left:auto;font-size:10px;padding:2px 8px;border-radius:5px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);cursor:pointer;color:var(--color-text-secondary)}
+.cpbtn:hover{color:var(--color-text-primary)}
+.tip{border-left:3px solid #1d9e75;background:var(--color-background-success);padding:7px 10px;font-size:12px;color:var(--color-text-secondary);line-height:1.65;margin-top:8px;border-radius:0 6px 6px 0}
+.warn{border-left:3px solid #ba7517;background:var(--color-background-warning);padding:7px 10px;font-size:12px;color:var(--color-text-secondary);line-height:1.65;margin-top:8px;border-radius:0 6px 6px 0}
+.danger{border-left:3px solid #a32d2d;background:var(--color-background-danger);padding:7px 10px;font-size:12px;color:var(--color-text-secondary);line-height:1.65;margin-top:8px;border-radius:0 6px 6px 0}
+.tip strong,.warn strong,.danger strong{color:var(--color-text-primary)}
+.complete-wrap{margin-top:16px}
+.ccb{font-size:13px;padding:9px 16px;border-radius:9px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);cursor:pointer;color:var(--color-text-primary);transition:all .15s;width:100%}
+.ccb:hover{border-color:var(--color-border-primary)}
+.ccb.on{background:#5865f2;color:#fff;border-color:#5865f2}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:12px;border-top:0.5px solid var(--color-border-tertiary)}
+.fb{font-size:13px;padding:7px 15px;border-radius:8px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);cursor:pointer;color:var(--color-text-primary);transition:all .15s}
+.fb:hover{background:var(--color-background-primary);border-color:var(--color-border-primary)}
+.fb:disabled{opacity:.3;cursor:default}
+.fcnt{font-size:12px;color:var(--color-text-secondary)}
+code{font-family:var(--font-mono);font-size:.92em;background:var(--color-background-secondary);padding:1px 4px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="pagehead">
+    <h1>Discord — from Zero</h1>
+    <div class="sub">You installed it and never used it — this takes you from “what even is this” to confidently using it for cybersecurity / CTF / hackathon communities. Progress saved in this browser. 🛡 = safety step you must not skip.</div>
+  </div>
+  <div class="phase-nav" id="nav"></div>
+  <div class="pbar"><div class="pfill" id="pfill"></div></div>
+  <div class="pmeta"><span id="pcount"></span><span class="reset" onclick="resetProgress()">reset progress</span></div>
+  <div id="content"></div>
+  <div class="foot">
+    <button class="fb" id="bp" onclick="go(-1)" disabled>← Previous</button>
+    <span class="fcnt" id="fc"></span>
+    <button class="fb" id="bn" onclick="go(1)">Next →</button>
+  </div>
+</div>
+
+<script>
+const D=[
+{
+  id:"p0",label:"Start here",title:"What Discord is — and why it's worth your time",
+  desc:"Discord is a free chat app built around communities called 'servers' — text channels, voice calls, and video, all organised by topic. It began with gamers but now hosts study groups, open-source projects, and a massive cybersecurity / CTF scene. For your goals, it's where infosec communities actually talk.",
+  steps:[
+    {
+      t:"0.1 — Discord in one line",
+      desc:"You don't post to 'Discord' globally like Twitter. You JOIN specific communities (servers), and inside each server you chat in rooms (channels). Think group chats + forums + voice calls, grouped by topic. That's the whole idea.",
+      tip:"Nothing you do is broadcast to all of Discord. Everything happens inside a server you chose to join, or in a private DM."
+    },
+    {
+      t:"0.2 — Why it matters for your path",
+      desc:"CTF teams, bug-bounty hunters, and learning platforms (TryHackMe, HackTheBox, PortSwigger and others) run active official Discord servers. Conferences and hackathons use them too. Just lurking in a couple of good servers teaches you tools, slang, and current attacks faster than most courses — because you see real people solving real problems.",
+      blocks:[]
+    },
+    {
+      t:"0.3 — The honest verdict",
+      desc:"This is a learn-by-doing tool. Budget ~30 minutes: lock down your account (Phase 1), learn the simple mental model (Phase 2), join one or two good servers (Phase 5), then lurk and read. Don't overthink it — but DO the security steps first, because Discord accounts are a heavy scam target.",
+      tip:"Order that works: secure the account → learn the map → join one official cyber server → read for a week → ask one good question."
+    }
+  ]
+},
+{
+  id:"p1",label:"Phase 1 🛡",title:"Phase 1 — Lock down your account first",
+  desc:"Five minutes before anything else. Discord accounts get phished and stolen constantly, so you secure it BEFORE you join public servers.",
+  steps:[
+    {
+      t:"1.1 — Username vs display name",
+      desc:"Discord gives you a unique @username (a lowercase handle, like @purva_h) and a display name (the friendlier name shown in servers, which you can change anytime). The handle is effectively public.",
+      blocks:[
+        {kind:"do",tag:"DO",lbl:"Pick your identity",lines:[
+          {c:"User Settings (⚙ bottom-left) → Profiles → set username + display name",note:"The @username is your unique handle; display name is cosmetic."},
+          {c:"Consider NOT using your full real name in public infosec servers",note:"Keep a little separation between your public security identity and your private life."}
+        ]}
+      ]
+    },
+    {
+      t:"1.2 — Turn on 2FA right now",
+      badge:"sec",
+      desc:"Two-factor authentication is the single most important step. With it, a phishing click alone can't take your account. It's also required before you can moderate any server later.",
+      blocks:[
+        {kind:"do",tag:"SECURE",lbl:"Enable two-factor auth",lines:[
+          {c:"Settings → My Account → Enable Two-Factor Auth",note:"Use an AUTHENTICATOR APP (e.g. Authy/Google Authenticator), not just SMS — SIM-swap beats SMS."},
+          {c:"Save the BACKUP CODES somewhere offline",note:"These get you back in if you lose your phone. Don't store them only on the phone."},
+          {c:"Optionally add a security key later for even stronger 2FA",note:""}
+        ]}
+      ],
+      warn:"No 2FA = one phishing page can own your account. Authenticator-app 2FA + saved backup codes closes that door."
+    },
+    {
+      t:"1.3 — Privacy settings (fewer scam DMs)",
+      desc:"Tighten who can message and friend you so strangers can't slide into your DMs with scams.",
+      blocks:[
+        {kind:"do",tag:"DO",lbl:"Reduce your attack surface",lines:[
+          {c:"Settings → Privacy & Safety → restrict 'Direct Messages' from server members",note:"Cuts down unsolicited scam DMs the moment you join a big server."},
+          {c:"Settings → Privacy & Safety → control who can send you friend requests",note:""},
+          {c:"Keep 'Keep me safe' DM content filtering on",note:""}
+        ]}
+      ]
+    },
+    {
+      t:"1.4 — Email + strong unique password",
+      badge:"sec",
+      desc:"Verify your email and use a long, unique password stored in a password manager. Never reuse the password that protects your email.",
+      blocks:[
+        {kind:"do",tag:"SECURE",lbl:"Account basics",lines:[
+          {c:"Verify your email (check inbox for Discord's verification link)",note:"Unverified accounts get restricted and are easier to lose."},
+          {c:"Set a long unique password via a password manager",note:"If this password leaks elsewhere, attackers will try it on Discord."}
+        ]}
+      ]
+    }
+  ]
+},
+{
+  id:"p2",label:"Phase 2",title:"Phase 2 — The mental model (the map)",
+  desc:"Discord looks busy at first, but it's just a few nested things. Learn these and the whole app clicks.",
+  steps:[
+    {
+      t:"2.1 — Servers, channels, DMs",
+      desc:"Three core ideas. A SERVER is a community. A CHANNEL is a room inside a server. A DM is a private message to one person or a small group — outside any server.",
+      blocks:[
+        {kind:"do",tag:"MAP",lbl:"The three building blocks",lines:[
+          {c:"Server  = a whole community (the round icons on the far-left bar)",note:"e.g. a CTF team, a college group, HackTheBox's official server."},
+          {c:"Channel = a room inside a server (#general, #help, 🔊 voice)",note:"Channels keep conversations on-topic."},
+          {c:"DM / Group DM = private chat outside any server",note:"1:1 or a small private group."}
+        ]}
+      ]
+    },
+    {
+      t:"2.2 — What you're looking at (screen layout)",
+      desc:"The desktop app has four columns. Once you can name them, you'll never feel lost.",
+      blocks:[
+        {kind:"do",tag:"MAP",lbl:"Left to right",lines:[
+          {c:"Far-left bar  = your servers + the Home/DM button",note:"Click an icon to enter that server."},
+          {c:"Second column = that server's channels (and categories)",note:""},
+          {c:"Centre        = the actual conversation",note:""},
+          {c:"Right         = the member list; top bar = channel name, search, pins",note:""}
+        ]}
+      ]
+    },
+    {
+      t:"2.3 — Channel types",
+      desc:"Not all channels are the same. The icon tells you what it is.",
+      blocks:[
+        {kind:"do",tag:"MAP",lbl:"Icons you'll see",lines:[
+          {c:"#  text channel — normal chat",note:""},
+          {c:"🔊 voice channel — click to join and talk live",note:"No 'call' button; joining the channel IS the call."},
+          {c:"📣 announcement · forum (threaded posts) · stage (audio events)",note:""},
+          {c:"Thread — a side-conversation branched off one message",note:"Keeps tangents from cluttering the main channel."}
+        ]}
+      ]
+    },
+    {
+      t:"2.4 — Roles & why some channels are hidden",
+      desc:"Admins and mods assign roles (a colour + a set of permissions). Many servers hide most channels until you complete a welcome/verify step and get a role.",
+      blocks:[
+        {kind:"do",tag:"MAP",lbl:"Roles in practice",lines:[
+          {c:"Roles give colour + access (e.g. @member, @ctf-player, @mod)",note:""},
+          {c:"If you only see 1–2 channels, look for a #rules / #welcome verify step",note:"Often you react to a message or click a button to unlock the rest."}
+        ]}
+      ],
+      tip:"Seeing almost no channels after joining usually means you haven't passed the server's verification — find the #welcome or #rules channel."
+    }
+  ]
+},
+{
+  id:"p3",label:"Phase 3",title:"Phase 3 — Core actions (day-to-day use)",
+  desc:"Everything you'll actually do: join, message, talk, and find things.",
+  steps:[
+    {
+      t:"3.1 — Joining a server",
+      desc:"You join via an invite link (it looks like discord.gg/xxxx) or by pasting an invite code.",
+      blocks:[
+        {kind:"do",tag:"DO",lbl:"Two ways in",lines:[
+          {c:"Click an invite link → Accept Invite",note:"Opens the server in your app."},
+          {c:"Or: + button on the far-left bar → Join a Server → paste the invite",note:""}
+        ]}
+      ],
+      warn:"Only follow invite links from sources you trust. For official communities, get the invite from the platform's OWN website (see Phase 5), never a random forum or DM."
+    },
+    {
+      t:"3.2 — Messaging basics",
+      desc:"The conversation toolkit. Hover any message to see its actions.",
+      blocks:[
+        {kind:"do",tag:"DO",lbl:"Send, reply, react, mention",lines:[
+          {c:"Type in the box + Enter to send  (Shift+Enter = new line, no send)",note:""},
+          {c:"Hover a message → Reply to answer it directly",note:"Keeps who-said-what clear in busy channels."},
+          {c:"@name to mention a person or role; emoji react with the 😀 on hover",note:"Mentioning pings that person."},
+          {c:"You can Edit or Delete your own messages anytime",note:""}
+        ]}
+      ]
+    },
+    {
+      t:"3.3 — Voice & video",
+      desc:"Voice is instant — there's no 'dial'. You join a voice channel and you're in.",
+      blocks:[
+        {kind:"do",tag:"DO",lbl:"Talk live",lines:[
+          {c:"Click a 🔊 channel to join immediately",note:"Everyone in that channel can hear you."},
+          {c:"Mute / deafen yourself with the controls bottom-left",note:"Mute often before joining a busy room."},
+          {c:"'Share Your Screen' to present; Disconnect (phone icon) to leave",note:""}
+        ]}
+      ]
+    },
+    {
+      t:"3.4 — Finding things",
+      desc:"Servers get big. Search and pins save you.",
+      blocks:[
+        {kind:"do",tag:"DO",lbl:"Search & navigate",lines:[
+          {c:"Search bar (top-right): use filters like from:user  in:#channel  has:link",note:""},
+          {c:"Pinned messages (pin icon) hold the important stuff in each channel",note:"Always read pins in #rules and #resources channels."},
+          {c:"Ctrl/Cmd+K = quick switcher: jump to any server or DM by typing its name",note:"The fastest way to move around."}
+        ]}
+      ]
+    }
+  ]
+},
+{
+  id:"p4",label:"Phase 4",title:"Phase 4 — Formatting & sharing code",
+  desc:"Discord uses simple markdown. Worth learning because you'll paste code, errors and CTF notes — and formatted code is far easier to read and help with.",
+  steps:[
+    {
+      t:"4.1 — Text formatting",
+      desc:"Wrap text in symbols to style it. Type these literally in a message.",
+      blocks:[
+        {kind:"do",tag:"FORMAT",lbl:"Markdown reference",lines:[
+          {c:"**bold**   *italic*   __underline__   ~~strikethrough~~",note:""},
+          {c:"> quote      ||spoiler||      # big heading",note:"Spoilers stay hidden until clicked."},
+          {c:"- item  (a bullet list)      `inline code`",note:""}
+        ]}
+      ]
+    },
+    {
+      t:"4.2 — Sharing code the right way",
+      desc:"For anything technical, paste inside a triple-backtick block with a language name — it keeps formatting and adds colour, which makes people far more willing to help.",
+      blocks:[
+        {kind:"prompt",tag:"COPY",lbl:"Code-block template (copy, then paste your code inside)",lines:[
+          {c:"```python\n# paste your code or output here\nprint(\"hello\")\n```"}
+        ]}
+      ],
+      tip:"Put a language right after the opening ``` (python, bash, js, c…) for syntax highlighting. For one-liners, wrap in single `backticks`. Never paste long code as plain text — it becomes unreadable."
+    }
+  ]
+},
+{
+  id:"p5",label:"Phase 5",title:"Phase 5 — Communities worth exploring",
+  desc:"Where to actually spend your time as a security learner — and how to find them safely. Always get invites from each platform's OWN official site, not random links.",
+  steps:[
+    {
+      t:"5.1 — Types of servers for your path",
+      desc:"A map of the cyber side of Discord. You don't need many — one or two active ones beats joining fifty.",
+      blocks:[
+        {kind:"do",tag:"FIND",lbl:"Server categories to look for",lines:[
+          {c:"CTF teams & events — discover via CTFtime (ctftime.org)",note:"Many teams recruit and coordinate on Discord."},
+          {c:"Learning platforms' OFFICIAL servers — TryHackMe, HackTheBox, PortSwigger",note:"Get the invite from a link on their own website/dashboard."},
+          {c:"Bug-bounty & tool communities — around specific tools/projects",note:""},
+          {c:"Your college / hackathon / conference servers",note:"Often the most useful day to day."}
+        ]}
+      ]
+    },
+    {
+      t:"5.2 — How to find & vet a server safely",
+      desc:"Treat an unknown server like any untrusted place. A quick check tells you if it's legit.",
+      blocks:[
+        {kind:"do",tag:"VET",lbl:"Before you trust a server",lines:[
+          {c:"Get the invite from the platform's official site or verified social account",note:"Not from a random Google result, ad, or DM."},
+          {c:"Check: real member count, recent activity, clear rules, active mods",note:"Ghost towns and rule-less servers are red flags."},
+          {c:"Be wary of any server pushing 'free' tools, courses, or Nitro",note:"Real communities don't lead with free hacking loot."}
+        ]}
+      ],
+      warn:"Servers offering cracked tools, 'free Nitro', or paid 'hacking courses via DM' are scams or malware fronts. Legit learning communities never DM you offers."
+    },
+    {
+      t:"5.3 — Lurk before you leap",
+      desc:"The highest-value move on day one is to read, not post. You'll absorb norms and a surprising amount of security knowledge just by watching.",
+      tip:"Read the pinned messages and a week of recent history before posting. You'll learn the culture, the right channels, and a lot of tooling for free."
+    }
+  ]
+},
+{
+  id:"p6",label:"Phase 6",title:"Phase 6 — Etiquette & getting help",
+  desc:"How to fit in and actually get answers instead of being ignored.",
+  steps:[
+    {
+      t:"6.1 — Rules & the right channel",
+      desc:"Every good server has a #rules channel and topic-specific channels. Posting in the right place gets you helped; posting everywhere gets you muted.",
+      blocks:[
+        {kind:"do",tag:"RULE",lbl:"Basics of being welcome",lines:[
+          {c:"Read #rules first; follow the verification step",note:""},
+          {c:"Ask in the channel that matches your topic (e.g. #web, #help)",note:""},
+          {c:"Search the server before asking — it may be answered already",note:""}
+        ]}
+      ]
+    },
+    {
+      t:"6.2 — How to ask a good question",
+      desc:"Good questions get fast answers. Vague ones get silence.",
+      blocks:[
+        {kind:"do",tag:"DO",lbl:"A question that gets answered",lines:[
+          {c:"Say what you're trying to do and what you already tried",note:""},
+          {c:"Paste errors/code in a ``` code block (Phase 4)",note:""},
+          {c:"Be specific — 'X fails with error Y' beats 'it doesn't work'",note:""}
+        ]}
+      ],
+      tip:"Don't 'ask to ask' ('anyone good at Python?'). Just post the real question with details — you'll get help much faster."
+    },
+    {
+      t:"6.3 — Pinging etiquette",
+      desc:"Mentions notify people. Overusing them is the fastest way to annoy a server.",
+      blocks:[
+        {kind:"do",tag:"RULE",lbl:"Don't be that person",lines:[
+          {c:"Never use @everyone / @here (you usually can't anyway)",note:""},
+          {c:"Don't ping admins/mods unless they've said it's okay",note:""},
+          {c:"One clear message beats five fragmented ones",note:""}
+        ]}
+      ]
+    }
+  ]
+},
+{
+  id:"p7",label:"Phase 7 🛡",title:"Phase 7 — Safety & scams (read this twice)",
+  desc:"Discord is heavily targeted by scammers and account thieves. As a security person, treat it as an untrusted environment. These are the real attacks you'll see.",
+  steps:[
+    {
+      t:"7.1 — The QR-code login scam",
+      badge:"sec",
+      desc:"Discord lets you log in on desktop by scanning a QR code with the mobile app. Scammers post a login QR claiming 'scan for free Nitro / a game skin'. Scanning it logs THEM into YOUR account.",
+      blocks:[
+        {kind:"do",tag:"RULE",lbl:"The one rule",lines:[
+          {c:"ONLY scan a Discord QR shown on YOUR OWN computer's login screen",note:"Never a QR sent in chat, a DM, or a website."}
+        ]}
+      ],
+      danger:"A login QR is a key to your account. If anyone asks you to scan one for a reward, it's account theft. Never do it."
+    },
+    {
+      t:"7.2 — Fake Nitro, gifts & giveaways",
+      desc:"The most common phishing on Discord. Fake 'free Nitro' or 'gift' links lead to pages that look like Discord's login and steal your password.",
+      blocks:[
+        {kind:"do",tag:"DETECT",lbl:"Spot the phish",lines:[
+          {c:"'Free Nitro' / 'gift' links from DMs or random servers = phishing",note:"Real Nitro gifts come through Discord itself, never a random link."},
+          {c:"Check the URL — look-alike domains (discordapp-gift, dlscord) are fake",note:"When unsure, don't log in; go to discord.com directly."},
+          {c:"'Giveaways' that need your login or card details are scams",note:""}
+        ]}
+      ]
+    },
+    {
+      t:"7.3 — Token grabbers & malicious bots/scripts",
+      badge:"sec",
+      desc:"This is the big one for you. Your Discord 'token' is your live session — stealing it takes over your account WITHOUT your password or 2FA. Attackers trick people into running code that exfiltrates it.",
+      blocks:[
+        {kind:"do",tag:"RULE",lbl:"Never run untrusted code",lines:[
+          {c:"NEVER paste code into the browser console because someone told you to",note:"'Paste this to get Nitro/admin' = a token grabber. 100% of the time."},
+          {c:"Don't run random .exe/.py/'mods'/'cheats' people send",note:"Classic malware + token theft vector."},
+          {c:"Don't add unknown bots — especially ones requesting Administrator",note:"Only add reputable bots, with minimal permissions."}
+        ]}
+      ],
+      danger:"If a message tells you to run, paste, or install something to unlock a feature or reward — it is an attack. There is no legitimate version of this."
+    },
+    {
+      t:"7.4 — Stranger DMs & OPSEC",
+      desc:"Treat unsolicited DMs like cold calls, and be mindful of what you reveal in public servers.",
+      blocks:[
+        {kind:"do",tag:"OPSEC",lbl:"Protect yourself",lines:[
+          {c:"Be skeptical of any unsolicited DM, 'job offer', or 'collab'",note:"Scammers target newer accounts and security learners specifically."},
+          {c:"Don't reveal real name, school, city, or workplace in public servers",note:"You can't un-say it once it's posted."},
+          {c:"Use Block + Report on anything sketchy; right-click user → Block",note:""}
+        ]}
+      ],
+      danger:"Anything offering money, tools, or a 'job' via DM that feels too good is a scam. Block, report, move on."
+    }
+  ]
+},
+{
+  id:"p8",label:"⚡ Cheat-sheet",title:"Power features + cheat-sheet & first-week plan",
+  desc:"Nice-to-knows and the fast lookup. Bookmark this phase.",
+  steps:[
+    {
+      t:"Bots & Nitro — what they are",
+      desc:"Two things you'll hear about constantly.",
+      blocks:[
+        {kind:"do",tag:"INFO",lbl:"The short version",lines:[
+          {c:"Bots = automated accounts (moderation, music, CTF tools, role menus)",note:"Server admins add them; you interact via commands like /help."},
+          {c:"Nitro = Discord's paid subscription (bigger uploads, HD stream, emoji)",note:"Optional. You do NOT need it to use Discord fully."}
+        ]}
+      ]
+    },
+    {
+      t:"Keyboard shortcuts",
+      desc:"A few that genuinely speed you up.",
+      blocks:[
+        {kind:"do",tag:"KEYS",lbl:"Worth memorising",lines:[
+          {c:"Ctrl/Cmd + K  →  quick switcher: jump to any server/DM",note:"The single most useful shortcut."},
+          {c:"Shift + Enter  →  new line without sending",note:""},
+          {c:"Ctrl/Cmd + E  →  emoji picker   ·   Esc  →  mark channel read",note:""},
+          {c:"Ctrl/Cmd + /  →  full list of shortcuts",note:""}
+        ]}
+      ]
+    },
+    {
+      t:"Safety rules in one place",
+      badge:"sec",
+      desc:"If you remember nothing else, remember these.",
+      blocks:[
+        {kind:"do",tag:"RULE",lbl:"The non-negotiables",lines:[
+          {c:"2FA on. Backup codes saved offline.",note:""},
+          {c:"Never scan a login QR someone sends you.",note:""},
+          {c:"Never run/paste code or files to 'unlock' anything.",note:""},
+          {c:"'Free Nitro' / gift links = phishing. Block & report.",note:""}
+        ]}
+      ]
+    },
+    {
+      t:"Your first-week plan",
+      desc:"The fastest way to actually get comfortable — do it, don't study it.",
+      blocks:[
+        {kind:"do",tag:"PLAN",lbl:"Five steps over a few days",lines:[
+          {c:"1. Secure the account: 2FA + backup codes + tightened DM privacy",note:"Phase 1 — do this first."},
+          {c:"2. Set your username, display name, and a custom status",note:""},
+          {c:"3. Join ONE official cyber server (from its real website)",note:"Phase 5."},
+          {c:"4. Read #rules + pinned messages, then lurk for a few days",note:""},
+          {c:"5. Ask one well-formed question in a beginner/help channel",note:"Phase 6."}
+        ]}
+      ],
+      tip:"Don't overthink Discord — secure it, join one good server, and read. Everything else you'll pick up just by being there."
+    }
+  ]
+}
+];
+
+// ===== state + persistence =====
+let cur=0;
+const open={};
+let done={};
+try{
+  const s=JSON.parse(localStorage.getItem('discord-guide-v1')||'null');
+  if(s){cur=s.cur||0;Object.assign(open,s.open||{});done=s.done||{};}
+}catch(e){}
+function save(){try{localStorage.setItem('discord-guide-v1',JSON.stringify({cur,open,done}))}catch(e){}}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function renderBlock(b,pi,si,bi){
+  const id=`b-${pi}-${si}-${bi}`;
+  const rows=(b.lines||[]).map(x=>{
+    if(!x.c)return'';
+    return`<div class="row"><span class="cmd">${esc(x.c)}</span></div>${x.note?`<div class="note">${esc(x.note)}</div>`:''}`
+  }).join('');
+  const isPrompt=b.kind==='prompt';
+  const hdr=isPrompt?'prm-hdr':'do-hdr';
+  const tag=b.tag?`<span class="ptag">${esc(b.tag)}</span>`:'';
+  const copy=isPrompt?`<button class="cpbtn" onclick="cp(this,'${id}')">📋 Copy</button>`:'';
+  return`<div class="block">
+    <div class="bhdr ${hdr}">${tag}&nbsp;${esc(b.lbl||'')}${copy}</div>
+    <div class="bbody" id="${id}">${rows}</div>
+  </div>`;
+}
+
+function renderStep(step,pi,si){
+  const key=`${pi}-${si}`;
+  const isOpen=open[key];
+  const badge=step.badge==='sec'?`<span class="sbadge sec-badge">🛡 Safety</span>`:step.badge==='adv'?`<span class="sbadge adv-badge">⭐ Power</span>`:'';
+  return`<div class="step${isOpen?' open':''}" id="step-${key}">
+    <div class="step-hdr" onclick="tog('${key}')">
+      <div class="sn">${si+1}</div>
+      <div class="st">${esc(step.t)}</div>
+      ${badge}
+      <span class="chev">▾</span>
+    </div>
+    <div class="step-body">
+      <div class="step-desc">${esc(step.desc)}</div>
+      ${(step.blocks||[]).map((b,bi)=>renderBlock(b,pi,si,bi)).join('')}
+      ${step.tip?`<div class="tip"><strong>Tip:</strong> ${esc(step.tip)}</div>`:''}
+      ${step.warn?`<div class="warn"><strong>Caution:</strong> ${esc(step.warn)}</div>`:''}
+      ${step.danger?`<div class="danger"><strong>Danger:</strong> ${esc(step.danger)}</div>`:''}
+    </div>
+  </div>`;
+}
+
+function doneCount(){return D.reduce((n,_,i)=>n+(done[i]?1:0),0)}
+
+function render(){
+  const ph=D[cur];
+  document.getElementById('nav').innerHTML=D.map((p,i)=>`<button class="pn${i===cur?' active':done[i]?' done':''}" onclick="goTo(${i})">${done[i]&&i!==cur?'✓ ':''}${esc(p.label)}</button>`).join('');
+  const dc=doneCount();
+  document.getElementById('pfill').style.width=((dc/D.length)*100)+'%';
+  document.getElementById('pcount').textContent=`${dc} of ${D.length} phases complete`;
+  document.getElementById('fc').textContent=`Phase ${cur+1} of ${D.length}`;
+  document.getElementById('bp').disabled=cur===0;
+  document.getElementById('bn').disabled=cur===D.length-1;
+  document.getElementById('content').innerHTML=`
+    <div class="phase-title">${esc(ph.title)}</div>
+    <div class="phase-desc">${esc(ph.desc)}</div>
+    ${ph.steps.map((s,si)=>renderStep(s,cur,si)).join('')}
+    <div class="complete-wrap">
+      <button class="ccb${done[cur]?' on':''}" onclick="toggleDone()">${done[cur]?'✓ Phase complete — click to unmark':'Mark this phase complete'}</button>
+    </div>
+  `;
+  save();
+}
+
+function goTo(i){cur=i;render();window.scrollTo(0,0)}
+function go(d){goTo(Math.max(0,Math.min(D.length-1,cur+d)))}
+function tog(key){open[key]=!open[key];render()}
+function toggleDone(){done[cur]=!done[cur];render()}
+function resetProgress(){if(confirm('Clear all saved progress and start from the beginning?')){done={};for(const k in open)delete open[k];cur=0;render();window.scrollTo(0,0)}}
+function cp(btn,id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  const lines=[...el.querySelectorAll('.cmd')].map(e=>e.textContent).filter(t=>t&&t.trim());
+  navigator.clipboard.writeText(lines.join('\n\n')).then(()=>{const o=btn.textContent;btn.textContent='✓ Copied';setTimeout(()=>{btn.textContent=o},1400)});
+}
+render();
+</script>
+</body>
+</html>
